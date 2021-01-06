@@ -1,0 +1,18 @@
+- defaults:
+    link:
+      create: true
+      relink: true
+      force: true
+
+- clean: ['~', '~/.config']
+
+- shell:
+  - [git submodule update --init --recursive, Installing submodules]
+
+- link:
+    ~/.dotfiles: ''
+    ~/.profile: config/shell/profile
+    ~/.zshenv: config/shell/zsh/.zshenv
+    ~/.config/:
+      glob: true
+      path: config/*

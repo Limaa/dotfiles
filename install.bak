@@ -1,0 +1,63 @@
+#!/bin/bash
+
+BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
+DATA_DIR="${XDG_DATA_HOME:-$HOME/.local/share}"
+CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.data}"
+
+################################################################################
+# Dotfiles
+################################################################################
+[ -d "$HOME/.dotfiles" ] || ln -s $BASEDIR $HOME/.dotfiles 
+
+
+# Apps
+# sudo apt install git zsh powerline fonts-powerline -y
+
+################################################################################
+# Shell
+################################################################################
+ln -s $BASEDIR/profile $HOME/.profile
+
+################################################################################
+# ZSH
+################################################################################
+ln -s $BASEDIR/zprofile $HOME/.zprofile
+
+mkdir -p $CONFIG_DIR/zsh $DATA_DIR/zsh
+ln -s $BASEDIR/zsh/zshrc $CONFIG_DIR/zsh/.zshrc
+touch $CONFIG_DIR/zsh/local_zprofile
+touch $CONFIG_DIR/zsh/local_zshrc
+
+ln -s $BASEDIR/aliasrc $CONFIG_DIR/aliasrc
+
+################################################################################
+# TMUX
+################################################################################
+mkdir -p "$CONFIG_DIR/tmux"
+ln -s "$BASEDIR/tmux/tmux.conf" "$CONFIG_DIR/tmux/tmux.conf"
+
+# Older versions of tmux do not search for .config/tmux, this is a workaround
+ln -s "$CONFIG_DIR/tmux/tmux.conf" "$HOME/.tmux.conf"
+
+################################################################################
+# NVIM
+################################################################################
+# sudo apt install nodejs -y # This is for NVIM Conquer of Completion
+# sudo apt install clangd -y
+# pip3 install cmake-language-server
+# npm i -g bash-language-server
+mkdir -p $CONFIG_DIR/vim
+mkdir -p $DATA_DIR/vim/plugged
+mkdir -p $DATA_DIR/vim/autoload
+ln -s $BASEDIR/vim/vimrc $CONFIG_DIR/vim/vimrc
+touch $CONFIG_DIR/vim/vimrc
+ln -s $BASEDIR/vim/coc-settings.json $CONFIG_DIR/vim/coc-settings.json
+
+################################################################################
+# GIT
+################################################################################
+mkdir -p $CONFIG_DIR/git
+ln -s $BASEDIR/git/gitconfig $CONFIG_DIR/git/config
+touch $CONFIG_DIR/git/local_config
+

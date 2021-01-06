@@ -1,0 +1,47 @@
+#!/bin/sh
+
+# Color support for ls
+if uname -s | egrep -q "Darwin"; then
+    alias ls='ls -G'
+elif uname -s | egrep -q "Linux|MINGW|CYGWIN" ]; then
+    alias ls="ls --color=auto"
+fi
+
+alias cp='cp -iv'
+alias mv='mv -iv'
+alias rm='rm -v'
+alias ll='ls -lhFA'
+alias la='ls -CFA'
+alias l='ls -CF'
+
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias cd..="cd .."
+
+alias :q="exit"
+
+alias grep="grep --color=auto"
+alias egrep="egrep --color=auto"
+alias fgrep="fgrep --color=auto"
+
+alias ezc='$EDITOR $XDG_CONFIG_HOME/zsh/.zshrc'
+alias szc='. $XDG_CONFIG_HOME/zsh/.zshrc'
+alias evc='$EDITOR $MYVIMRC'
+alias etc='$EDITOR $XDG_CONFIG_HOME/tmux/tmux.conf'
+
+# Mount NTFS external drive (MacOS)
+# Usage: sudo umount /dev/disk2s1 && mnt-ntfs /dev/disk2s1 /Volumes/NTFS
+alias mnt-ntfs='sudo ntfs-3g -o local -o allow-other -o auto_xattr'
+
+# GIT
+alias gs='git status'
+alias ga='git add'
+alias gd='git diff'
+alias gl="git log"
+alias gds='git diff --staged'
+alias gcm='git commit'
+alias gco='git checkout'
+
+# Source local aliases
+[ -f "$XDG_CONFIG_HOME/shell/aliases.local" ] && . "$XDG_CONFIG_HOME/shell/aliases.local"

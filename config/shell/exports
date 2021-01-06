@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# System
+export PATH=$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:$PATH
+export EDITOR='vim'
+
+# Add LLVM to path
+export PATH=/usr/local/opt/llvm/bin:$PATH
+
+# Pip
+# export PIP_CONFIG_FILE="$XDG_CONFIG_HOME/pip/pip.ini"
+
+# Vim & Neovim
+export MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc"
+export VIMINIT="source $MYVIMRC"
+
+# JFrog Artifactory docker volume
+export JFROG_HOME="$XDG_DATA_HOME/jfrog"
+
+# Colored GCC warnings and errors
+export GTEST_COLOR=1
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+# Source local exports
+[ -f "$XDG_CONFIG_HOME/shell/exports.local" ] && . "$XDG_CONFIG_HOME/shell/exports.local"

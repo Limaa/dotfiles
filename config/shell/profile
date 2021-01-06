@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# XDG Base Directory Specification
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+
+# Source exports
+[ -f "$XDG_CONFIG_HOME/shell/exports" ] && . "$XDG_CONFIG_HOME/shell/exports"
+
+# Source aliases
+[ -f "$XDG_CONFIG_HOME/shell/aliases" ] && . "$XDG_CONFIG_HOME/shell/aliases"
+
+# Source functions
+[ -f "$XDG_CONFIG_HOME/shell/functions" ] && . "$XDG_CONFIG_HOME/shell/functions"
+
+# Source local profile
+[ -f "$XDG_CONFIG_HOME/shell/profile.local" ] && . "$XDG_CONFIG_HOME/shell/profile.local"
+
