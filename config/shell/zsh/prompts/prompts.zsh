@@ -8,4 +8,8 @@ autoload -U promptinit && promptinit;
 
 # spaceship-prompt
 # https://github.com/denysdovhan/spaceship-prompt
-prompt spaceship
+# prompt spaceship
+
+# starship prompt
+eval "$(starship init zsh)"
+

@@ -7,6 +7,7 @@
 - clean: ['~', '~/.config']
 
 - shell:
+  - [sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- -b $HOME/.local/bin -y, Installing Starship promp]
   - [git submodule update --init --recursive, Installing submodules]
 
 - link:
