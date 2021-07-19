@@ -2,10 +2,13 @@
 
 # System
 export PATH=$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:$PATH
-export EDITOR='vim'
+export EDITOR='nvim'
 
 # Add LLVM to path
 export PATH=/usr/local/opt/llvm/bin:$PATH
+
+# Rust
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
 # Pip
 # export PIP_CONFIG_FILE="$XDG_CONFIG_HOME/pip/pip.ini"

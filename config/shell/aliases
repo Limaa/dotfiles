@@ -1,9 +1,9 @@
 #!/bin/sh
 
 # Color support for ls
-if uname -s | egrep -q "Darwin"; then
+if uname -s | grep -q "Darwin"; then
     alias ls='ls -G'
-elif uname -s | egrep -q "Linux|MINGW|CYGWIN" ]; then
+elif uname -s | grep -q "Linux|MINGW|CYGWIN"; then
     alias ls="ls --color=auto"
 fi
 
@@ -21,14 +21,13 @@ alias cd..="cd .."
 
 alias :q="exit"
 
-alias grep="grep --color=auto"
-alias egrep="egrep --color=auto"
-alias fgrep="fgrep --color=auto"
+alias vim="nvim"
 
-alias ezc='$EDITOR $XDG_CONFIG_HOME/zsh/.zshrc'
-alias szc='. $XDG_CONFIG_HOME/zsh/.zshrc'
+alias ezc='$EDITOR $ZDOTDIR/.zshrc'
+alias szc='. $ZDOTDIR/.zshrc'
 alias evc='$EDITOR $MYVIMRC'
 alias etc='$EDITOR $XDG_CONFIG_HOME/tmux/tmux.conf'
+alias eac='$EDITOR $XDG_CONFIG_HOME/shell/aliases'
 
 # Mount NTFS external drive (MacOS)
 # Usage: sudo umount /dev/disk2s1 && mnt-ntfs /dev/disk2s1 /Volumes/NTFS

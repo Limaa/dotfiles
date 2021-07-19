@@ -7,6 +7,23 @@ export HISTSIZE=10000
 export SAVEHIST=10000
 export HISTFILE=$XDG_DATA_HOME/zsh/zsh_history
 
+# Timestamp and elapsed time
+setopt EXTENDED_HISTORY
+# Share history among openzsh sessions
+setopt SHARE_HISTORY
+# Append to history instead of overwriting
+setopt APPEND_HISTORY
+# Update after every command, rather than waiting for the shell to exit
+setopt INC_APPEND_HISTORY
+# Expire duplicates first
+setopt HIST_EXPIRE_DUPS_FIRST
+# Do not store duplications
+setopt HIST_IGNORE_DUPS
+# Ignore duplicates when searching
+setopt HIST_FIND_NO_DUPS
+# Removes blank lines from history
+setopt HIST_REDUCE_BLANKS
+
 ################################################################################
 # Plugins
 ################################################################################
@@ -21,7 +38,7 @@ source $XDG_CONFIG_HOME/shell/zsh/zsh-syntax-highlighting/zsh-syntax-highlightin
 source $XDG_CONFIG_HOME/shell/zsh/zsh-history-substring-search/zsh-history-substring-search.zsh
 source $XDG_CONFIG_HOME/shell/zsh/prompts/prompts.zsh
 
-autoload -Uz compinit && compinit
+autoload -Uz compinit && compinit -d $XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION
 
 ################################################################################
 # User configuration

@@ -49,6 +49,8 @@ Plug 'junegunn/fzf.vim'
 Plug 'preservim/nerdtree'
 
 Plug 'gruvbox-community/gruvbox'
+Plug 'sonph/onehalf', { 'rtp': 'vim' }
+
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
@@ -76,7 +78,9 @@ set colorcolumn=80,120  " Show vertical columns
 set mouse=a             " Add mouse support in all modes
 set nowrap              " Disable line wrapping
 
-" set noshowmode          " Hide INSERT message in last line. Also works for REPLACE and VISUAL
+set cursorline          " Highlight the screen line of the cursor
+
+set noshowmode          " Hide INSERT message in last line. Also works for REPLACE and VISUAL
 
 " Center cursor in screen
 " https://vim.fandom.com/wiki/Keep_your_cursor_centered_vertically_on_the_screen
@@ -88,7 +92,11 @@ set noerrorbells
 set smartcase
 set ignorecase
 set incsearch
-set termguicolors
+if exists('+termguicolors')
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+endif
 set completeopt=menuone,noinsert,noselect " Set completeopt to have a better completion experience
 set shortmess+=c " Avoid showing message exta message when using completion
 
@@ -120,29 +128,30 @@ nnoremap <Down> :echoe "Use j"<CR>
 
 " First mappings
 inoremap jk <Esc>
+tnoremap jk <C-\><C-n>
 
 let mapleader = " "
-nnoremap <Leader>w :w!<CR>
-nnoremap <Leader>q :q<CR>
+nnoremap <Leader>w :write!<CR>
+nnoremap <Leader>q :quit<CR>
 nnoremap <Leader>so :source %<CR>
 nnoremap <Leader>v :edit $MYVIMRC<CR>
 nnoremap <Leader>1 :source $MYVIMRC \| :PlugInstall<CR>
 
 " Experimentations
-" nnoremap <C-b> :!rm -rf build && mkdir build && cd build && cmake .. && cmake --build .
-nnoremap <Leader>c :!cmake --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug -H. -B./build -G Ninja <Enter>
-nnoremap <Leader>b :!cmake --build build --config Debug --target all -- -j 10 <Enter>
-" nnoremap <Leader>r :!./build/day-25 <Enter>
-nnoremap <Leader>r :!./build/glwm <CR>
-" nnoremap <Leader>b :!python3 main.py
+autocmd Filetype c,cpp nnoremap <Leader>c :!cmake --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Release -H. -B./build -G Ninja <CR>
+autocmd Filetype c,cpp nnoremap <Leader>b :!cmake --build build --config Debug --target all -- -j 10 <CR>
+autocmd Filetype python nnoremap <Leader>b :!python3 %<CR>
 
 "-------------------------------------------------------------------------------
 " Colors & Formatting
 "-------------------------------------------------------------------------------
-colorscheme gruvbox
-let g:gruvbox_contrast_dark="hard"
-set background=dark
+" colorscheme gruvbox
+" set background=dark
+" let g:gruvbox_contrast_dark="hard"
 
+colorscheme onehalfdark
+set background=dark
+let g:airline_theme='onehalfdark'
 "-------------------------------------------------------------------------------
 " vim-commentary
 "-------------------------------------------------------------------------------
@@ -180,7 +189,7 @@ nnoremap <C-n> :NERDTreeToggle<CR>
 "   endif
 " endfunction
 
-" " Highlight the symbol and its references when holding the cursor.
+" Highlight the symbol and its references when holding the cursor.
 " autocmd CursorHold * silent call CocActionAsync('highlight')
 
 "-------------------------------------------------------------------------------
