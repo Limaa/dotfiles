@@ -1,4 +1,5 @@
 #!/usr/bin/env zsh
 
-# Source ~/.profile
-[ -f "$HOME/.profile" ] && . $HOME/.profile
+if ! uname -s | grep -q "Darwin"; then
+	[ -f "${HOME}/.zshrc" ] && source "${HOME}/.zshrc"
+fi

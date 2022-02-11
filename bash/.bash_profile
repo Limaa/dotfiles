@@ -1,9 +1,4 @@
-#
-# ~/.bash_profile
-#
+#!/bin/bash
 
-[ -f "$HOME/.profile" ] && . "$HOME/.profile"
-
-BASH_DIR="$XDG_CONFIG_HOME/shell/bash"
-[ -f "$BASH_DIR/.bashrc" ] && . "$BASH_DIR/.bashrc"
+[ -f "${HOME}/.bashrc" ] && . "${HOME}/.bashrc"
 
