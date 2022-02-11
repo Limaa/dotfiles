@@ -1,17 +1,71 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-set -e
+function install_packages() {
+	packages=(
+	# Base
+		wget
+		curl
+		neovim
+		tmux
+	# C/C++
+		cmake
+		ninja
+		gcc
+		gtest
+		clang
+	# Python
+		python
+		python-pip
+	# Shell
+		shellcheck
+	)
 
-CONFIG="install.conf.yaml"
-DOTBOT_DIR="dotbot"
+	if command -v pacman >/dev/null 2>&1; then
+		sudo pacman -Sy --needed --noconfirm "${packages[@]}"
+	fi
+}
 
-DOTBOT_BIN="bin/dotbot"
-BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+function install_pip() {
+	modules=(
+		neovim
+		docopt
+		jinja2
+		pandas
+		numpy
+	)
 
-cd "${BASEDIR}"
-sh install_packages.sh
-sh install_pip.sh
-git -C "${DOTBOT_DIR}" submodule sync --quiet --recursive
-git submodule update --init --recursive "${DOTBOT_DIR}"
+	pip install "${modules[@]}"
+}
 
-"${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" -c "${CONFIG}" "${@}"
+function install_zsh_plugins() {
+	local PLUGINS_DIR="${HOME}/.config/zsh/plugins"
+	mkdir -p "$PLUGINS_DIR"
+
+	# zsh-autosuggestions
+	rm -rf "${PLUGINS_DIR}/zsh-autosuggestions{,-0.7.0}"
+	curl -fsSL "https://github.com/zsh-users/zsh-autosuggestions/archive/refs/tags/v0.7.0.tar.gz" \
+		| tar -xz -C "${PLUGINS_DIR}"
+	ln -sf "${PLUGINS_DIR}/zsh-autosuggestions-0.7.0" "${PLUGINS_DIR}/zsh-autosuggestions"
+
+	# zsh-completions
+	rm -rf "${PLUGINS_DIR}/zsh-completions{,0.33.0}"
+	curl -fsSL "https://github.com/zsh-users/zsh-completions/archive/refs/tags/0.33.0.tar.gz" \
+		| tar -xz -C "${PLUGINS_DIR}"
+	ln -sf "${PLUGINS_DIR}/zsh-completions-0.33.0" "${PLUGINS_DIR}/zsh-completions"
+
+	# zsh-syntax-highlighting
+	rm -rf "${PLUGINS_DIR}/zsh-syntax-highlighting{,-0.7.1}"
+	curl -fsSL "https://github.com/zsh-users/zsh-syntax-highlighting/archive/refs/tags/0.7.1.tar.gz" \
+		| tar -xz -C "${PLUGINS_DIR}"
+	ln -sf "${PLUGINS_DIR}/zsh-syntax-highlighting-0.7.1" "${PLUGINS_DIR}/zsh-syntax-highlighting"
+
+	# zsh-history-substring-search
+	rm -rf "${PLUGINS_DIR}/zsh-history-substring-search{,-1.0.2}"
+	curl -fsSL "https://github.com/zsh-users/zsh-history-substring-search/archive/refs/tags/v1.0.2.tar.gz" \
+		| tar -xz -C "${PLUGINS_DIR}"
+	ln -sf "${PLUGINS_DIR}/zsh-history-substring-search-1.0.2" "${PLUGINS_DIR}/zsh-history-substring-search"
+}
+
+install_packages
+install_pip
+install_zsh_plugins
