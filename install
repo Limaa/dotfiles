@@ -15,8 +15,11 @@ function install_virtual_box() {
 		# https://wiki.debian.org/VirtualBox
 		sudo apt update
 		sudo apt install fasttrack-archive-keyring
-		echo "deb https://fasttrack.debian.net/debian-fasttrack/ bullseye-fasttrack main contrib" | sudo tee -a /etc/apt/sources.list
-		echo "deb https://fasttrack.debian.net/debian-fasttrack/ bullseye-backports-staging main contrib" | sudo tee -a /etc/apt/sources.list
+		FASTTRACK_SOURCES=/etc/apt/sources.list.d/fasttrack.list
+		sudo rm -f "$FASTTRACK_SOURCES"
+		sudo touch "$FASTTRACK_SOURCES"
+		echo "deb https://fasttrack.debian.net/debian-fasttrack/ bullseye-fasttrack main contrib" | sudo tee -a "$FASTTRACK_SOURCES"
+		echo "deb https://fasttrack.debian.net/debian-fasttrack/ bullseye-backports-staging main contrib" | sudo tee -a "$FASTTRACK_SOURCES"
 		sudo apt update
 		sudo apt install virtualbox virtualbox-ext-pack
 	}
