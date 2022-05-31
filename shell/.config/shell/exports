@@ -3,22 +3,14 @@
 # System
 export PATH=$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:$PATH
 export EDITOR='nvim'
+export LC_ALL="en_US.UTF-8"
 
 # Add LLVM to path
-export PATH=/usr/local/opt/llvm/bin:$PATH
+LLVM_BIN_DIR="/usr/local/opt/llvm/bin"
+[ -d "$LLVM_BIN_DIR" ] && export PATH="${LLVM_BIN_DIR}:${PATH}"
 
 # Rust
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
-
-# Pip
-# export PIP_CONFIG_FILE="$XDG_CONFIG_HOME/pip/pip.ini"
-
-# Vim & Neovim
-export MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc"
-export VIMINIT="source $MYVIMRC"
-
-# JFrog Artifactory docker volume
-export JFROG_HOME="$XDG_DATA_HOME/jfrog"
 
 # Colored GCC warnings and errors
 export GTEST_COLOR=1
