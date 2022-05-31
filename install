@@ -15,11 +15,27 @@ function install_virtual_box() {
 		# https://wiki.debian.org/VirtualBox
 		sudo apt update
 		sudo apt install fasttrack-archive-keyring
-		echo "deb https://fasttrack.debian.net/debian-fasttrack/ bullseye-fasttrack main contrib" | sudo tee -a /etc/apt/sources.list >/dev/null
-		echo "deb https://fasttrack.debian.net/debian-fasttrack/ bullseye-backports-staging main contrib" | sudo tee -a /etc/apt/sources.list >/dev/null
+		echo "deb https://fasttrack.debian.net/debian-fasttrack/ bullseye-fasttrack main contrib" | sudo tee -a /etc/apt/sources.list
+		echo "deb https://fasttrack.debian.net/debian-fasttrack/ bullseye-backports-staging main contrib" | sudo tee -a /etc/apt/sources.list
 		sudo apt update
 		sudo apt install virtualbox virtualbox-ext-pack
 	}
+}
+
+function install_debian_pkgs() {
+	sudo apt update
+	sudo apt-get -y install \
+		wget curl \
+		tmux neovim
+	sudo apt-get -y install \
+		gcc g++ gdb \
+		clang \
+		cmake ninja-build \
+		gtest
+	sudo apt-get -y install \
+		python3 python3-pip
+	sudo apt-get -y install \
+		shellcheck
 }
 
 function install_packages() {
@@ -42,11 +58,10 @@ function install_packages() {
 		shellcheck
 	)
 
-	if command -v pacman >/dev/null 2>&1; then
+	if command -v pacman >/dev/null; then
 		sudo pacman -Sy --needed --noconfirm "${packages[@]}"
 	elif command -v apt >/dev/null; then
-		sudo apt update
-		sudo apt install -y "${packages[@]}"
+		install_debian_pkgs
 	else
 		echo "Error: unknown package manager. Skipping installing system packages"
 	fi
