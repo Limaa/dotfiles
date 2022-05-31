@@ -30,6 +30,7 @@ function install_debian_pkgs() {
 
 	# Base
 	sudo apt-get -y install \
+		stow \
 		git \
 		wget curl \
 		tmux neovim
@@ -52,6 +53,7 @@ function install_debian_pkgs() {
 function install_packages() {
 	packages=(
 	# Base
+		stow
 		git
 		wget
 		curl
