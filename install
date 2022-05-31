@@ -1,5 +1,27 @@
 #!/bin/bash
 
+set -e
+
+function install_virtual_box() {
+	# https://ostechnix.com/check-linux-system-physical-virtual-machine/
+
+	OS=$(uname -s)
+	echo "$OS" | grep -qi "linux" || exit
+
+	VIRTUALIZATION=$(hostnamectl | grep -i "virtualization" | cut -d ":" -f 2 | xargs)
+	[ -z "$VIRTUALIZATION" ] && exit
+
+	echo "$VIRTUALIZATION" | grep -qi "oracle" && {
+		# https://wiki.debian.org/VirtualBox
+		sudo apt update
+		sudo apt install fasttrack-archive-keyring
+		echo "deb https://fasttrack.debian.net/debian-fasttrack/ bullseye-fasttrack main contrib" | sudo tee -a /etc/apt/sources.list >/dev/null
+		echo "deb https://fasttrack.debian.net/debian-fasttrack/ bullseye-backports-staging main contrib" | sudo tee -a /etc/apt/sources.list >/dev/null
+		sudo apt update
+		sudo apt install virtualbox virtualbox-ext-pack
+	}
+}
+
 function install_packages() {
 	packages=(
 	# Base
@@ -67,6 +89,7 @@ function install_zsh_plugins() {
 	ln -sf "${PLUGINS_DIR}/zsh-history-substring-search-1.0.2" "${PLUGINS_DIR}/zsh-history-substring-search"
 }
 
+install_virtual_box
 install_packages
 install_pip
 install_zsh_plugins
