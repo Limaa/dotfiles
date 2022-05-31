@@ -1,67 +1,52 @@
 set exrc
 
 "-------------------------------------------------------------------------------
-" XDG
-"-------------------------------------------------------------------------------
-if empty($MYVIMRC) | let $MYVIMRC = expand('<sfile>:p') | endif
-
-if empty($XDG_CACHE_HOME)  | let $XDG_CACHE_HOME  = $HOME."/.cache"       | endif
-if empty($XDG_CONFIG_HOME) | let $XDG_CONFIG_HOME = $HOME."/.config"      | endif
-if empty($XDG_DATA_HOME)   | let $XDG_DATA_HOME   = $HOME."/.local/share" | endif
-
-set runtimepath^=$XDG_CONFIG_HOME/vim
-set runtimepath+=$XDG_DATA_HOME/vim
-set runtimepath+=$XDG_CONFIG_HOME/vim/after
-
-set packpath^=$XDG_DATA_HOME/vim,$XDG_CONFIG_HOME/vim
-set packpath+=$XDG_CONFIG_HOME/vim/after,$XDG_DATA_HOME/vim/after
-
-let g:netrw_home = $XDG_DATA_HOME."/vim"
-call mkdir($XDG_DATA_HOME."/vim/spell", 'p', 0700)
-set viewdir=$XDG_DATA_HOME/vim/view | call mkdir(&viewdir, 'p', 0700)
-
-set backupdir=$XDG_CACHE_HOME/vim/backup | call mkdir(&backupdir, 'p', 0700)
-set directory=$XDG_CACHE_HOME/vim/swap   | call mkdir(&directory, 'p', 0700)
-set undodir=$XDG_CACHE_HOME/vim/undo     | call mkdir(&undodir,   'p', 0700)
-
-if !has('nvim') " Neovim has its own special location
-  set viminfofile=$XDG_CACHE_HOME/vim/viminfo
-endif
-
-"-------------------------------------------------------------------------------
 " Plugins
 "-------------------------------------------------------------------------------
-let g:plug_autoload = $XDG_DATA_HOME."/vim/autoload/plug.vim"
-let g:plug_plugged = $XDG_DATA_HOME."/vim/plugged"
-if empty(glob(g:plug_autoload))
-  execute "!curl -fLo ".g:plug_autoload." --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
-endif
-
-call plug#begin(g:plug_plugged)
-
+let g:vim_plug = $XDG_DATA_HOME . '/nvim/plugged'
+call plug#begin(g:vim_plug)
 Plug 'tpope/vim-commentary'
 
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" LSP
+Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
+" Completion
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+" For vsnip users
+Plug 'hrsh7th/cmp-vsnip'
+Plug 'hrsh7th/vim-vsnip'
+
+" Rust
+" Plug 'neovim/nvim-lspconfig'
+" Plug 'simrat39/rust-tools.nvim'
+
+Plug 'nvim-lua/plenary.nvim'
+" Plug 'mfussenegger/nvim-dap'
+
+" Fzf
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
 Plug 'preservim/nerdtree'
 
+" Colorschemes
 Plug 'gruvbox-community/gruvbox'
 Plug 'sonph/onehalf', { 'rtp': 'vim' }
+Plug 'joshdick/onedark.vim'
 
+" Airline
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
+" Git
 Plug 'airblade/vim-gitgutter'
-
-Plug 'sheerun/vim-polyglot'
-
-Plug 'SirVer/UltiSnips'
-Plug 'honza/vim-snippets'
-
 " fugitive
+
+
+Plug 'editorconfig/editorconfig-vim'
 " jiangmiao/auto-pairs
 
 call plug#end()
@@ -70,8 +55,6 @@ call plug#end()
 " Options
 "-------------------------------------------------------------------------------
 syntax on
-set relativenumber      " Show relative line numbers
-set number              " Show current line number instead of 0
 set signcolumn=yes      " Show column left to line numbers. Used by gitgutter and linters
 set updatetime=250      " Update sign column every quarter second
 set colorcolumn=80,120  " Show vertical columns
@@ -97,7 +80,7 @@ if exists('+termguicolors')
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors
 endif
-set completeopt=menuone,noinsert,noselect " Set completeopt to have a better completion experience
+set completeopt=menuone,menuone,noselect " Set completeopt to have a better completion experience
 set shortmess+=c " Avoid showing message exta message when using completion
 
 set cmdheight=2
@@ -140,7 +123,7 @@ nnoremap <Leader>1 :source $MYVIMRC \| :PlugInstall<CR>
 " Experimentations
 autocmd Filetype c,cpp nnoremap <Leader>c :!cmake --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Release -H. -B./build -G Ninja <CR>
 autocmd Filetype c,cpp nnoremap <Leader>b :!cmake --build build --config Debug --target all -- -j 10 <CR>
-autocmd Filetype python nnoremap <Leader>b :!python3 %<CR>
+autocmd Filetype python nnoremap <buffer> <Leader>b :!python3 %<CR>
 
 "-------------------------------------------------------------------------------
 " Colors & Formatting
@@ -149,9 +132,14 @@ autocmd Filetype python nnoremap <Leader>b :!python3 %<CR>
 " set background=dark
 " let g:gruvbox_contrast_dark="hard"
 
-colorscheme onehalfdark
+" colorscheme onehalfdark
+" set background=dark
+" let g:airline_theme='onehalfdark'
+
+colorscheme onedark
 set background=dark
-let g:airline_theme='onehalfdark'
+let g:airline_theme='onedark'
+
 "-------------------------------------------------------------------------------
 " vim-commentary
 "-------------------------------------------------------------------------------
@@ -170,34 +158,9 @@ nnoremap <C-p> :Files<CR>
 nnoremap <C-n> :NERDTreeToggle<CR>
 
 "-------------------------------------------------------------------------------
-" CocCompletion
+" Lua
 "-------------------------------------------------------------------------------
-" Remap keys for gotos
-" nmap <silent> gd <Plug>(coc-definition)
-" nmap <silent> gy <Plug>(coc-type-definition)
-" nmap <silent> gi <Plug>(coc-implementation)
-" nmap <silent> gr <Plug>(coc-references)
-
-" " Use K to show documentation in preview window
-" nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-" function! s:show_documentation()
-"   if (index(['vim','help'], &filetype) >= 0)
-"     execute 'h '.expand('<cword>')
-"   else
-"     call CocAction('doHover')
-"   endif
-" endfunction
-
-" Highlight the symbol and its references when holding the cursor.
-" autocmd CursorHold * silent call CocActionAsync('highlight')
-
-"-------------------------------------------------------------------------------
-" Snippets (UltiSnips & coc-snippets)
-"-------------------------------------------------------------------------------
-let g:UltiSnipsSnippetDirectories=[$XDG_CONFIG_HOME . '/nvim/snippets']
-imap <C-l> <Plug>(coc-snippets-expand)
-nnoremap <silent> <C-l> :CocList snippets<CR>
+lua require 'config'
 
 "-------------------------------------------------------------------------------
 " Local customizations / overriding
