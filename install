@@ -22,16 +22,17 @@ function install_packages() {
 
 	if command -v pacman >/dev/null 2>&1; then
 		sudo pacman -Sy --needed --noconfirm "${packages[@]}"
+	elif command -v apt >/dev/null; then
+		sudo apt update
+		sudo apt install -y "${packages[@]}"
+	else
+		echo "Error: unknown package manager. Skipping installing system packages"
 	fi
 }
 
 function install_pip() {
 	modules=(
 		neovim
-		docopt
-		jinja2
-		pandas
-		numpy
 	)
 
 	pip install "${modules[@]}"
