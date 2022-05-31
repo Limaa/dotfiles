@@ -85,9 +85,32 @@ function install_packages() {
 function install_pip() {
 	modules=(
 		neovim
+		cmake-language-server
+		pyright
 	)
 
 	pip install "${modules[@]}"
+}
+
+function install_nodejs() {
+	NODEJS_VERSION="v16.15.0"
+	NODEJS_DIR="${HOME}/.local/opt/nodejs"
+	INSTALL_DIR="${NODEJS_DIR}/node-${NODEJS_VERSION}-linux-x64"
+
+	mkdir -p "${NODEJS_DIR}"
+
+	pushd "${NODEJS_DIR}"
+	curl -fsSL "https://nodejs.org/dist/${NODEJS_VERSION}/node-${NODEJS_VERSION}-linux-x64.tar.xz" \
+		| tar -xz
+	ln -sf "${INSTALL_DIR}/bin" "${NODEJS_DIR}/bin"
+	popd
+}
+
+function install_npm() {
+	npm i -g \
+		bash-language-server \
+		dockerfile-language-server-nodejs \
+		vim-language-server
 }
 
 function install_zsh_plugins() {
@@ -144,6 +167,8 @@ function install_nvim_nightly() {
 install_virtual_box
 install_packages
 install_pip
+install_nodejs
+install_npm
 install_zsh_plugins
 install_shell_prompt
 install_vim_plug

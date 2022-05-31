@@ -65,5 +65,5 @@ lspconfig.pyright.setup(config)
 -- lspconfig.pylsp.setup(config)
 
 
-require('rust-tools').setup({})
+-- require('rust-tools').setup({})
 
