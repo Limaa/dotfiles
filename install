@@ -124,7 +124,21 @@ function install_shell_prompt() {
 }
 
 function install_vim_plug() {
-	curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+	curl -fsSL \
+		--create-dirs \
+		-o "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim \
+		https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+}
+
+function install_nvim_nightly() {
+	uname -s | grep -qi "linux" || exit
+	mkdir -p "${HOME}/.local/bin"
+	curl -fsSL \
+		--create-dirs \
+		-o "${HOME}/.local/opt/nvim/nvim.appimage" \
+		https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage
+	chmod +x "${HOME}/.local/opt/nvim/nvim.appimage"
+	ln -sf "${HOME}/.local/opt/nvim/nvim.appimage" "${HOME}/.local/bin/nvim"
 }
 
 install_virtual_box
@@ -133,3 +147,4 @@ install_pip
 install_zsh_plugins
 install_shell_prompt
 install_vim_plug
+install_nvim_nightly
